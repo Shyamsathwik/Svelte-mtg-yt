@@ -1,6 +1,25 @@
 <script>
   import Player from "./Player.svelte"; // Importing player component correctly
+let redScore = 20;
+let blueScore = 20;
+$:blueWon = redScore <=0;
+$:redWon = blueScore <=0;
+$:gameOver = blueWon || redWon;
+
+function updateBlueScore(e){
+  const updateScore =e.detail;
+  blueScore += updateScore;
+}
+function updateRedScore(e){
+  const updateScore =e.detail;
+  redScore += updateScore;
+}
+function newGame(){
+ redScore = 20;
+ blueScore = 20;
+}
 </script>
+
 
 <style>
   main {
@@ -31,9 +50,21 @@
 <main>
   <h1>Magic The Gathering Counter</h1>
   <div id="controls-container">
-<Player  />
-<Player  />
+<Player 
+{gameOver}
+on:points= {updateBlueScore}
+fontColor ="blue"
+won={blueWon}
+      winningText="Blue wins"
+      score={blueScore} />
+<Player
+ {gameOver}
+on:points = {updateRedScore}
+fontColor="red"
+won={redWon}
+winningText="Red Wins"
+      score={redScore} />
 </div>
 
-  <button>Start game</button>
+  <button on:click={newGame} >Start game</button>
 </main>

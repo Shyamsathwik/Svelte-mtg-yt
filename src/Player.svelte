@@ -1,3 +1,18 @@
+<script>
+import {createEventDispatcher} from "svelte";
+  export let score;
+  export let winningText;
+    export let won;
+    export let fontColor;
+    export let gameOver = false;
+    const dispatch = createEventDispatcher();
+    function minus(){
+      dispatch('points',-1);
+    }
+    function plus(){
+      dispatch('points',+1);
+    }
+</script>
 <style>
   .player {
     flex-grow: 2;
@@ -11,7 +26,10 @@
   .minus {
     background-color: brown;
   }
-
+button[disabled] {
+    background-color:grey;
+    pointer-events: none;
+  }
   .button {
     font-size: 20px;
     border-radius: 3px;
@@ -21,9 +39,13 @@
     font-weight: bold;
   }
 </style>
-<div class="player">
-  <h2>20</h2>
-  <button class="plus">+</button>
-    <button class="minus">-</button>
-<h2>Blue wins</h2>
+<div  style="color:{fontColor}"class="player">
+  <h2>{score}</h2>
+  <button on:click={plus} 
+  disabled={gameOver} class="plus">+</button>
+    <button on:click={minus}
+    disabled={gameOver} class="minus">-</button>
+{#if won}
+    <h2>{winningText}</h2>
+  {/if}
 </div>
